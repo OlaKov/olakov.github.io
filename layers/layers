@@ -1,0 +1,115 @@
+var basemap1 = new ol.layer.Tile({
+            source: new ol.source.BingMaps({
+            key: 'AkiSxYmz8XVaFltTqigb4q5GkQJv3DL5fjJesIiZF8NePrTAt4X1nWI3-vuv9oeQ',
+            imagerySet: 'AerialWithLabels',
+            maxZoom: 19,
+              }),
+            title: "basemap",
+            type: "base"
+          });
+
+var basemap2 = new ol.layer.Tile({
+            source: new ol.source.OSM(),
+            type: "base",
+            title: "OSM" 
+            });
+
+var BaseMapGroup = new ol.layer.Group({
+    layers: [basemap1, basemap2],
+    title: 'Base Maps'
+
+});
+
+
+
+
+
+
+var format_pipelines0 = new ol.format.GeoJSON();
+var features_pipelines0 = format_pipelines0.readFeatures(json_pipelines0, 
+            {dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857'});
+var jsonSource_pipelines0 = new ol.source.Vector({
+    attributions: [new ol.Attribution({html: '<a href=""></a>'})],
+});
+jsonSource_pipelines0.addFeatures(features_pipelines0);
+
+var lyr_pipelines0 = new ol.layer.Vector({
+                source:jsonSource_pipelines0, 
+                style: style_pipelines0,
+                title: '<img src="styles/legend/pipelines0.png" /> pipelines'
+            });
+
+
+
+var format_lakes1 = new ol.format.GeoJSON();
+var features_lakes1 = format_lakes1.readFeatures(json_lakes1, 
+            {dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857'});
+var jsonSource_lakes1 = new ol.source.Vector({
+    attributions: [new ol.Attribution({html: '<a href=""></a>'})],
+});
+jsonSource_lakes1.addFeatures(features_lakes1);
+
+var lyr_lakes1 = new ol.layer.Vector({
+                source:jsonSource_lakes1, 
+                style: style_lakes1,
+                title: '<img src="styles/legend/lakes1.png" /> lakes'
+            });
+
+
+
+var format_airports2 = new ol.format.GeoJSON();
+var features_airports2 = format_airports2.readFeatures(json_airports2, 
+            {dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857'});
+var jsonSource_airports2 = new ol.source.Vector({
+    attributions: [new ol.Attribution({html: '<a href=""></a>'})],
+});
+jsonSource_airports2.addFeatures(features_airports2);
+
+var lyr_airports2 = new ol.layer.Vector({
+                source:jsonSource_airports2, 
+                style: style_airports2,
+                title: '<img src="styles/legend/airports2.png" /> airports'
+            });
+
+var alaska = new ol.layer.Group({
+    layers: [lyr_pipelines0],
+    title: 'Alaska'
+
+});
+
+var alaska_sub_subgroup = new ol.layer.Group({
+    layers: [lyr_airports2],
+    title: 'Sub-sub-group'
+
+});
+
+var alaska_subgroup = new ol.layer.Group({
+    layers: [alaska_sub_subgroup],
+    title: 'Alaska Sub-group'
+
+});
+
+var alaska_group = new ol.layer.Group({
+    layers: [alaska_subgroup, lyr_lakes1],
+    title: 'Alaska Group'
+
+});
+
+
+
+
+
+lyr_pipelines0.setVisible(true);lyr_lakes1.setVisible(true);lyr_airports2.setVisible(true);alaska_group.setVisible(true);
+var layersList = [BaseMapGroup, alaska_group, alaska];
+lyr_pipelines0.set('fieldAliases', {'cat': 'cat', 'LOCDESC': 'LOCDESC', 'F_CODE': 'F_CODE', 'F_CODEDESC': 'F_CODEDESC', });
+lyr_lakes1.set('fieldAliases', {'cat': 'cat', 'NAMES': 'NAMES', 'AREA_MI': 'AREA_MI', 'xlabel': 'xlabel', 'ylabel': 'ylabel', 'rotation': 'rotation', });
+lyr_airports2.set('fieldAliases', {'ID': 'ID', 'fk_region': 'fk_region', 'ELEV': 'ELEV', 'NAME': 'NAME', 'USE': 'USE', });
+lyr_pipelines0.set('fieldImages', {'cat': 'TextEdit', 'LOCDESC': 'TextEdit', 'F_CODE': 'TextEdit', 'F_CODEDESC': 'TextEdit', });
+lyr_lakes1.set('fieldImages', {'cat': 'TextEdit', 'NAMES': 'TextEdit', 'AREA_MI': 'TextEdit', 'xlabel': 'TextEdit', 'ylabel': 'TextEdit', 'rotation': 'TextEdit', });
+lyr_airports2.set('fieldImages', {'ID': 'TextEdit', 'fk_region': 'TextEdit', 'ELEV': 'TextEdit', 'NAME': 'TextEdit', 'USE': 'TextEdit', });
+lyr_pipelines0.set('fieldLabels', {'cat': 'no label', 'LOCDESC': 'no label', 'F_CODE': 'no label', 'F_CODEDESC': 'no label', });
+lyr_lakes1.set('fieldLabels', {'cat': 'no label', 'NAMES': 'no label', 'AREA_MI': 'no label', 'xlabel': 'no label', 'ylabel': 'no label', 'rotation': 'no label', });
+lyr_airports2.set('fieldLabels', {'ID': 'no label', 'fk_region': 'no label', 'ELEV': 'no label', 'NAME': 'no label', 'USE': 'no label', });
+lyr_airports2.on('precompose', function(evt) {
+    evt.context.globalCompositeOperation = 'normal';
+});
